@@ -49,7 +49,4 @@
 <p align="center"> <img src="https://github.com/housongweikk/MSLF-SSRNet/blob/main/Figs/fig4.jpg" width="100%"> </p>
 
 ## Acknowledgement
-Our work and implementations are inspired and based on the following projects: <br> 
-[LF-DFnet](https://github.com/YingqianWang/LF-DFnet)<br> 
-[LF-InterNet](https://github.com/YingqianWang/LF-InterNet)<br> 
-We sincerely thank the authors for sharing their code and amazing research work!
+Our work and implementations are inspired and based on the following projects: <br> [BasicLFSR](https://github.com/ZhengyuLiang24/BasicLFSR)<br>  We sincerely thank the authors for sharing their code and amazing research work!
