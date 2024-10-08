@@ -1,5 +1,5 @@
 # MSLF-SSRNet: Multi-Subspace Light Field Spatial Super-Resolution Network
-<p align="center"> <img src="https://raw.github.com/ZhengyuLiang24/LFT/main/Figs/LFT_overview.png" width="100%"> </p>
+<p align="center"> <img src="https://raw.github.com/housongweikk/MSLF-SSRNet/blob/main/Figs/fig1.jpg" width="100%"> </p>
 
 ## Contributions:
 * **We propose a novel extraction strategy with three specialized convolutional filters for the 2D subspaces of LFs,designed to fully capture LF information for spatial super-resolution tasks.**
@@ -40,13 +40,13 @@
 <br><br>
 ## Results:  
 * **Visual Comparisons 2×**
-<p align="center"> <img src="https://raw.github.com/ZhengyuLiang24/LFT/main/Figs/LFT_Quantitative.png" width="100%"> </p>
+<p align="center"> <img src="https://raw.github.com/housongweikk/MSLF-SSRNet/blob/main/Figs/fig2.jpg" width="100%"> </p>
 
 * **Visual Comparisons 4×**
-<p align="center"> <img src="https://raw.github.com/ZhengyuLiang24/LFT/main/Figs/LFT_Efficiency.png" width="60%"> </p>
+<p align="center"> <img src="https://raw.github.com/housongweikk/MSLF-SSRNet/blob/main/Figs/fig3.jpg" width="100%"> </p>
 
 * **Assessing the Impact of combined loss**
-<p align="center"> <img src="https://raw.github.com/ZhengyuLiang24/LFT/main/Figs/LFT_Qualitative.png" width="100%"> </p>
+<p align="center"> <img src="https://raw.github.com/housongweikk/MSLF-SSRNet/blob/main/Figs/fig4.jpg" width="100%"> </p>
 
 ## Acknowledgement
 Our work and implementations are inspired and based on the following projects: <br> 
