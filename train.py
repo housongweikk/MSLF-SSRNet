@@ -83,7 +83,7 @@ def main(args):
 
 
     ''' LOSS LOADING '''
-    criterion = MODEL.get_loss(alpha=args.alpha).to(device)
+    criterion = MODEL.get_loss.to(device)
     ''' Optimizer '''
     optimizer = torch.optim.Adam(
         [paras for paras in net.parameters() if paras.requires_grad == True],
