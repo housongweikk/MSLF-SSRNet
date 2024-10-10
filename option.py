@@ -1,7 +1,7 @@
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--task', type=str, default='SR', help='SR, RE')#RE有可能是Reconstruction的意思
+parser.add_argument('--task', type=str, default='SR', help='SR, RE')
 
 
 parser.add_argument("--angRes", type=int, default=5, help="angular resolution")
