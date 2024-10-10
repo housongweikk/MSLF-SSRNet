@@ -77,12 +77,10 @@ class tsfefb(nn.Module):
         )
 
     def forward(self, x, x1):
-        out = self.SpaConv(x1)
-        out_MacPI = SAI2MacPI(out, self.angRes)
-        feaSpa = out_MacPI.unsqueeze(1)
-        feaAng = self.AngConv(x).unsqueeze(1)
-        feaEpiH = self.EPIConv(x).unsqueeze(1)
-        feaEpiV = self.EPIConv(x.permute(0, 1, 3, 2).contiguous()).permute(0, 1, 3, 2).unsqueeze(1)
+        feaSpa = self.SpaConv(x1)
+        feaAng = self.AngConv(x)
+        feaEpiH = self.EPIConv(x)
+        feaEpiV = self.EPIConv(x.permute(0, 1, 3, 2).contiguous()).permute(0, 1, 3, 2)
         buffer = torch.cat((feaSpa, feaAng, feaEpiH, feaEpiV), dim=1)
         [out, att_weight] = self.attention_fusion(buffer)
         buffer = self.fuse(out)
@@ -90,7 +88,7 @@ class tsfefb(nn.Module):
 
 
 class AttentionFusion(nn.Module):
-    def __init__(self, channels, eps=1e-6):
+    def __init__(self, channels, eps=1e-5):
         super(AttentionFusion, self).__init__()
         self.epsilon = eps
         self.alpha = nn.Parameter(torch.ones(1))
