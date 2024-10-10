@@ -15,7 +15,7 @@ class get_model(nn.Module):
         self.init_conv = nn.Conv2d(1, channels, kernel_size=3, stride=1, dilation=self.angRes, padding=self.angRes,
                                    bias=False)
         self.init_conv1 = CustomConvBlockSconv(1, channels, kernel_size=3)
-        self.disentg = DisentgGroup(n_block, self.angRes, channels)
+        self.extract = tsfefbs(n_block, self.angRes, channels)
         self.upsample = nn.Sequential(
             nn.Conv2d(channels, channels * self.factor ** 2, kernel_size=1, stride=1, padding=0),
             nn.PixelShuffle(self.factor),
@@ -26,18 +26,18 @@ class get_model(nn.Module):
         x1 = SAI2MacPI(x, self.angRes)
         buffer = self.init_conv(x1)
         buffer1= self.init_conv1(x)
-        buffer2 = self.disentg(buffer,buffer1)
+        buffer2 = self.extract(buffer,buffer1)
         buffer_SAI = MacPI2SAI(buffer2, self.angRes)
         out = self.upsample(buffer_SAI) + x_upscale
         return out
 
 
-class DisentgGroup(nn.Module):
+class tsfefbs(nn.Module):
     def __init__(self, n_block, angRes, channels):
-        super(DisentgGroup, self).__init__()
+        super(tsfefbs, self).__init__()
         self.n_block = n_block
         self.angRes = angRes
-        Blocks = [DisentgBlock(angRes, channels) for i in range(n_block)]
+        Blocks = [tsfefb(angRes, channels) for i in range(n_block)]
         self.Blocks = nn.ModuleList(Blocks)
 
 
@@ -49,9 +49,9 @@ class DisentgGroup(nn.Module):
             buffer1=MacPI2SAI(buffer, self.angRes)
         return buffer
 
-class DisentgBlock(nn.Module):
+class tsfefb(nn.Module):
     def __init__(self, angRes, channels):
-        super(DisentgBlock, self).__init__()
+        super(tsfefb, self).__init__()
         self.angRes = angRes
         self.channels = channels
         self.SpaConv = nn.Sequential(
@@ -250,26 +250,24 @@ class CustomConvBlockSconv(nn.Module):
 
 
 def MacPI2SAI(x, angRes):
-    out = []
-    for i in range(angRes):
-        out_h = []
-        for j in range(angRes):
-            out_h.append(x[:, :, i::angRes, j::angRes])
-        out.append(torch.cat(out_h, 3))
-    out = torch.cat(out, 2)
-    return out
-
+    b, c, hu, wv = x.shape
+    h, w = hu // angRes, wv // angRes
+    x_reshaped = x.view(b, c, angRes, h, angRes, w)
+    x_reshaped = x_reshaped.permute(0, 1, 3, 5, 2, 4).contiguous()
+    x_reshaped = x_reshaped.view(b, c, h * angRes, w * angRes)
+    return x_reshaped
+    
 def SAI2MacPI(x, angRes):
     b, c, hu, wv = x.shape
     h, w = hu // angRes, wv // angRes
-
-    output = torch.zeros_like(x)
-
-    for i in range(angRes):
-        for j in range(angRes):
-            output[:, :, i::angRes, j::angRes] = x[:, :, i * h:(i + 1) * h, j * w:(j + 1) * w]
-
-    return output
+    tempU = []
+    for i in range(h):
+        tempV = []
+        for j in range(w):
+            tempV.append(x[:, :, i::h, j::w])
+        tempU.append(torch.cat(tempV, dim=3))
+    out = torch.cat(tempU, dim=2)
+    return out
 
 
 
